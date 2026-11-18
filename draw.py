@@ -4,9 +4,9 @@
 A newspaper front page summing up Tuesday 17 November 2026 in one image:
 serif masthead with the date and a true story count, three hero stories
 with map/flag illustrations and geographic labels, sixteen mid stories
-with small illustrations and category tags, a by-the-numbers strip, a
-world map drawn from real longitude/latitude outlines with a Europe &
-Middle East zoom inset, an "also on Tuesday" list, and a sources footer.
+with small illustrations and category tags, a world map drawn from real
+longitude/latitude outlines, an "also on Tuesday" list, and a sources
+footer.
 Every story carries a serial number 1-40 — a badge on its panel, a number
 on its map marker, and a number before its also-on line — so the list and
 the map cross-reference each other. Flat shapes and crisp text only, so
@@ -536,10 +536,7 @@ CONTINENTS_LL = [
 ]
 
 # Story locations on the map: (longitude, latitude, continent colour,
-# story number). True positions for each story's place. A few markers are
-# nudged a degree or two on the main map only (MAIN_SPREAD, still inside
-# the right country or region) so tight clusters stay readable; the zoom
-# inset below shows the Europe & Middle East cluster at true positions.
+# story number). True positions for each story's place.
 MARKERS_LL = [
     (36.5, 45.3, C_EUROPE, 1),    # Kerch Bridge, Crimea
     (50.6, 26.2, C_MIDEAST, 2),   # Bahrain (US radar) / Qeshm strikes
@@ -580,34 +577,34 @@ MARKERS_LL = [
     (100.5, 13.8, C_ASIA, 37),    # Thailand, Bangkok
     (86.0, 20.0, C_ASIA, 38),     # Cyclone Akvan, Odisha coast
     (36.8, -1.3, C_AFRICA, 39),   # Kenya, Nairobi
-    (-122.0, 37.3, C_AMERICAS, 40),  # Apple, Cupertino
+    (-121.9, 37.3, C_AMERICAS, 40),  # Apple, Cupertino
 ]
 
 # Main-map display nudges (degrees) for tight clusters; the badge stays
 # on the story's country or region, just with breathing room. Clusters
 # too tight for separate dots at this scale get a leader line instead:
 # MAIN_LEADERS maps a story number to a badge lon/lat, with a thin line
-# back to the true anchor.
+# back to the true anchor. Badge positions were laid out on the
+# full-width map (1 degree = 1.13 px lon, 1.48 px lat) so no two badges
+# sit closer than ~13 px centre to centre.
 MAIN_SPREAD = {
-    4: (-8.0, -4.0), 15: (1.0, 0.6), 20: (-1.3, -1.0),
-    27: (-1.5, -0.9), 30: (0.6, -1.0), 38: (-1.0, 0.5),
+    4: (-8.0, -4.0),
+    27: (-1.5, -0.9),
 }
 MAIN_LEADERS = {
-    40: (-112, 46), 35: (-110, 28), 29: (-68, 46), 39: (42, 7),
-    17: (99, 26), 6: (90, 38), 14: (-8, 40), 26: (16, 60),
-    21: (46, 34), 24: (22, 22), 31: (16, 34), 23: (59, 44),
-}
-
-# Europe & Middle East zoom inset: lon -12..58, lat 15..62, drawn at
-# 2.0 px per degree. These stories sit inside it; the rest stay on the
-# main map only. Tight pairs get a leader line from an offset badge to
-# the true anchor (INSET_LEADERS: number -> badge lon/lat).
-INSET_NUMBERS = [1, 2, 7, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24,
-                 25, 26, 30, 31]
-INSET_LEADERS = {
-    14: (-2.0, 45.0), 26: (10.0, 56.0), 21: (33.0, 38.0),
-    24: (28.0, 27.0), 31: (41.0, 33.0), 22: (-2.0, 53.0),
-    20: (26.0, 48.0),
+    # US West Coast / East Coast
+    40: (-112, 46), 35: (-110, 28), 29: (-68, 46),
+    # Europe & Middle East cluster, fanned out to empty sea and land
+    12: (-16, 48), 14: (-10, 40), 26: (-4, 58), 22: (-16, 58),
+    19: (12, 58), 15: (26, 58), 25: (44, 62), 1: (40, 52),
+    16: (10, 40), 20: (22, 38), 30: (34, 38), 21: (48, 34),
+    7: (20, 28), 31: (36, 26), 24: (48, 22), 2: (60, 24),
+    23: (58, 40), 13: (42, 10),
+    # Asia
+    17: (99, 26), 6: (90, 38), 38: (94, 14), 37: (108, 8),
+    33: (72, 36),
+    # Africa
+    39: (48, 2), 18: (24, -30), 34: (40, -30),
 }
 
 LEGEND = [
@@ -632,49 +629,61 @@ HEROES = [
      scene_bridge),
     ("MIDDLE EAST · IRAN WAR",
      "US strikes Iran after drone attacks",
-     "US jets hit a missile site on Qeshm Island after Iran fired drones "
-     "at a US radar in Bahrain — its third attack there in five days.",
+     "US jets hit a missile site on Qeshm Island; Iran fired drones "
+     "at a US radar in Bahrain.",
      scene_strikes),
     ("ASIA · DIPLOMACY",
      "Trump heads to Asia for APEC talks",
      "Trump starts in Manila for the ASEAN–US summit, then heads to "
-     "Shenzhen for APEC talks with China's Xi and Russia's Putin.",
+     "Shenzhen for APEC.",
      scene_asia),
 ]
 
 MIDS = [
     ("AFRICA · HEALTH", "EBOLA IN DR CONGO",
-     "Passes 11,000 cases; 5,400 deaths", mini_ebola),
+     "Outbreak passes 11,000 cases; 5,400 deaths so far.", mini_ebola),
     ("BUSINESS", "NVIDIA: $115 BILLION",
-     "$115.8bn sales; Huang won't return", mini_chip),
+     "Sales above $115bn; ousted CEO Huang will not return.", mini_chip),
     ("ASIA · CLIMATE", "NEPAL FIRST",
-     "UN loss-and-damage funds set aside", mini_mountains),
+     "First UN loss-and-damage funds set aside after floods.",
+     mini_mountains),
     ("MIDDLE EAST · GAZA", "GAZA AID AT RISK",
-     "Four nations urge crossings to open", mini_gaza),
+     "UK, Australia, Canada, Italy urge Israel to open crossings.",
+     mini_gaza),
     ("ASIA · POLITICS", "MONGOLIA PRESIDENT RESIGNS",
-     "President quits amid corruption scandal", mini_parliament),
+     "President Khürelsükh resigns amid corruption scandal.",
+     mini_parliament),
     ("ASIA · SECURITY", "JAPAN SCRAMBLES JETS",
-     "Russian jets violate Japanese airspace", mini_jet),
+     "Japan scrambles jets as Russian aircraft violate airspace.",
+     mini_jet),
     ("AMERICAS · HEALTH", "MEASLES STATUS LOST",
-     "US, Mexico, Bolivia lose measles status", mini_measles),
+     "US, Mexico, Bolivia lose measles-free status; 5,400+ US cases.",
+     mini_measles),
     ("RUSSIA · AIR CRASH", "PLANE CRASH KILLS 19",
-     "Military plane crash kills all 19 on board", mini_crash),
+     "Russian military plane crash in Siberia kills all 19 aboard.",
+     mini_crash),
     ("EUROPE · JUSTICE", "DEPARDIEU PLEADS GUILTY",
-     "Actor admits assault, drops appeal", mini_court),
+     "Depardieu pleads guilty to assault charge; drops appeal.",
+     mini_court),
     ("MIDDLE EAST · YEMEN", "HOUTHI ADVANCE",
-     "Troops retreat as Houthis advance", mini_desert),
+     "Houthi forces advance; government troops retreat from coast.",
+     mini_desert),
     ("EUROPE · LABOUR", "FRANCE STRIKES AGAIN",
-     "Second strike over pay and terms", mini_crowd),
+     "Second nationwide strike over wages and conditions.", mini_crowd),
     ("EUROPE · UKRAINE WAR", "KYIV BRIDGES HIT",
-     "Strikes hit two bridges; water, power cut", mini_kyiv),
+     "Russian strikes hit two key bridges; water and power cut.",
+     mini_kyiv),
     ("EUROPE · POLITICS", "SERBIA: STUDENTS TAKE POWER",
-     "Student List sworn in; Vučić era ends", mini_serbia),
+     "Student List sworn in with 140 of 250 seats; Vučić era ends.",
+     mini_serbia),
     ("ASIA · LABOUR", "BANGLADESH: TEAR GAS AT PROTEST",
-     "Tear gas at protest; 37 factories shut", mini_bangladesh),
+     "Police tear-gas garment workers; 37 factories shut.",
+     mini_bangladesh),
     ("AFRICA · JUSTICE", "MONDLANE ON TRIAL",
-     "Mondlane on trial; up to 24 years", mini_prison),
+     "Opposition leader Mondlane on trial; faces up to 24 years.",
+     mini_prison),
     ("BUSINESS", "DEUTSCHE BANK SINKS",
-     "Shares fall >6% after 15m-file leak", mini_bank),
+     "Shares fall over 6% after 15m-file leak on oligarchs.", mini_bank),
 ]
 
 ALSO_ON = [
@@ -702,15 +711,6 @@ ALSO_ON = [
 ]
 
 STORY_COUNT = len(HEROES) + len(MIDS) + len(ALSO_ON)  # 40
-
-# By-the-numbers strip: four figures, each from a story on this page.
-# The drone figure is a claim (the also-on line says "claimed").
-STRIP = [
-    ("1,441", "Russian drones claimed in one night"),
-    ("$115.8bn", "Nvidia quarterly revenue"),
-    ("5,400+", "US measles cases in 2026"),
-    ("11,000+", "Ebola cases in DR Congo"),
-]
 
 # Number colours: the badge/marker/list number of each story takes its
 # continent colour, so the number cross-references the map legend.
@@ -761,7 +761,7 @@ def main():
     # ---- Mid grid: 4 columns x 4 rows, compact panels ----
     mgap = 6
     mw = (W - 2 * margin - 3 * mgap) // 4  # 246
-    mh = 92
+    mh = 98
     my0 = 292
     for i, (tag, title, caption, scene) in enumerate(MIDS):
         col, row = i % 4, i // 4
@@ -769,44 +769,31 @@ def main():
         py = my0 + row * (mh + mgap)
         d.rectangle([px, py, px + mw, py + mh], fill=WHITE,
                     outline=INK, width=2)
-        scene(d, px + 2, py + 2, mw - 4, 34)
-        num_badge(d, px + 14, py + 14, 12, i + 4, MID_COLORS[i], 12)
-        d.text((px + 10, py + 42), tag, font=font(BOLD, 10), fill=RED)
+        scene(d, px + 2, py + 2, mw - 4, 32)
+        num_badge(d, px + 14, py + 13, 12, i + 4, MID_COLORS[i], 12)
+        d.text((px + 10, py + 40), tag, font=font(BOLD, 10), fill=RED)
         tfont = fit_font(d, title, BOLD, 14, mw - 20)
         lines = wrap(d, title, tfont, mw - 20)
-        d.text((px + 10, py + 56), lines[0], font=tfont, fill=NAVY)
+        d.text((px + 10, py + 53), lines[0], font=tfont, fill=NAVY)
         clines = wrap(d, caption, font(REG, 11), mw - 20)
-        d.text((px + 10, py + 72), clines[0], font=font(REG, 11),
-               fill=GREY)
-
-    # ---- By-the-numbers strip ----
-    sy = 684
-    d.rectangle([margin, sy, W - margin, sy + 44], fill=WHITE,
-                outline=INK, width=1)
-    sw = (W - 2 * margin) // 4
-    for i, (num, label) in enumerate(STRIP):
-        cx = margin + i * sw + sw // 2
-        d.text((cx, sy + 5), num, font=font(BOLD, 20), fill=NAVY,
-               anchor="ma")
-        d.text((cx, sy + 29), label, font=font(REG, 10), fill=GREY,
-               anchor="ma")
-        if i:
-            d.line([margin + i * sw, sy + 6, margin + i * sw, sy + 38],
-                   fill=(200, 200, 200), width=1)
+        ly = py + 68
+        for line in clines[:2]:
+            d.text((px + 10, ly), line, font=font(REG, 11), fill=GREY)
+            ly += 12
 
     # ---- Bottom band: world map (left) + also-on list (right) ----
-    by = 734
+    by = 708
     # Map panel
     mx, mw2 = margin, 450
-    d.rectangle([mx, by, mx + mw2, by + 242], fill=WHITE,
+    d.rectangle([mx, by, mx + mw2, by + 266], fill=WHITE,
                 outline=INK, width=2)
     d.text((mx + 10, by + 6), "WHERE IT HAPPENED",
            font=font(BOLD, 15), fill=NAVY)
     d.text((mx + 10, by + 24), "Numbered dots match stories 1–40.",
            font=font(REG, 10), fill=GREY)
-    # main map: 290 x 143, the 446 x 220 box scaled 0.65
-    map_x, map_y = mx + 2, by + 40
-    map_w, map_h = 290, 143
+    # main map: full width, 405 x 200 (the 446 x 220 box scaled 0.909)
+    map_x, map_y = mx + 22, by + 40
+    map_w, map_h = 405, 200
     ms = map_h / 220.0
     d.rectangle([map_x, map_y, map_x + map_w, map_y + map_h],
                 fill=(226, 238, 244))
@@ -833,41 +820,14 @@ def main():
         cx, cy = ll_to_map(lon, lat)
         num_badge(d, map_x + cx * ms, map_y + cy * ms, 6, n, col,
                   9 if n < 10 else 8)
-    # zoom inset: Europe & Middle East (lon -12..58, lat 15..62) at
-    # 2.0 px per degree, drawn on its own image so coastlines clip
-    inset = Image.new("RGB", (150, 143), (226, 238, 244))
-    di = ImageDraw.Draw(inset)
-    di.text((75, 3), "EUROPE & MIDDLE EAST", font=font(BOLD, 9),
-            fill=NAVY, anchor="ma")
-    iox, ioy, isc = 5, 34, 2.0
-    for poly in CONTINENTS_LL:
-        di.polygon([(iox + (lon + 12.0) * isc, ioy + (62.0 - lat) * isc)
-                    for lon, lat in poly],
-                   fill=(170, 196, 168), outline=(120, 150, 125))
-    by_num = {n: (lon, lat, col) for lon, lat, col, n in MARKERS_LL}
-    for n in INSET_NUMBERS:
-        lon, lat, col = by_num[n]
-        ax, ay = iox + (lon + 12.0) * isc, ioy + (62.0 - lat) * isc
-        bx, byy = ax, ay
-        if n in INSET_LEADERS:
-            blon, blat = INSET_LEADERS[n]
-            bx, byy = (iox + (blon + 12.0) * isc,
-                       ioy + (62.0 - blat) * isc)
-            di.line([bx, byy, ax, ay], fill=GREY, width=1)
-        num_badge(di, bx, byy, 5, n, col, 8)
-    img.paste(inset, (mx + mw2 - 152, map_y))
-    d.rectangle([mx + mw2 - 152, map_y, mx + mw2 - 2, map_y + 143],
-                outline=NAVY, width=1)
-    # legend: 2 rows x 3 columns
-    ly = by + 194
-    for i, (name, col) in enumerate(LEGEND):
-        lx = mx + 12 + (i % 3) * 148
-        ly2 = ly + (i // 3) * 17
-        d.ellipse([lx, ly2 + 2, lx + 9, ly2 + 11], fill=col)
-        d.text((lx + 13, ly2), name, font=font(REG, 11), fill=INK)
-    d.text((mx + 10, by + 228),
-           "Dots 1–40: all stories on this page, numbered to match the list.",
-           font=font(REG, 10), fill=GREY)
+    # legend: one row under the map
+    lx = mx + 12
+    ly = by + 250
+    rfnt = font(REG, 11)
+    for name, col in LEGEND:
+        d.ellipse([lx, ly + 2, lx + 9, ly + 11], fill=col)
+        d.text((lx + 13, ly), name, font=rfnt, fill=INK)
+        lx += int(d.textlength(name, font=rfnt)) + 13 + 10
 
     # Also-on list
     ax = mx + mw2 + gap  # 468
