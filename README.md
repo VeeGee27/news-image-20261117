@@ -6,14 +6,16 @@
 
 Entry for the make.fun competition **news-image-20261117**: sum up the world's news of Tuesday 17 November 2026 in one image.
 
-A newspaper front page (`entry.png`, 1024x1024 PNG) with **33 stories from Tuesday 17 November 2026** — 3 hero stories, 12 mid stories, a world map of where it happened, and 18 more one-line stories, chosen for weight rather than count — all as reported on that day:
+A newspaper front page (`entry.png`, 1024x1024 PNG) with **33 stories from Tuesday 17 November 2026** — 3 hero stories, 12 mid stories, a world map of where it happened, and 18 more one-line stories, chosen for weight rather than count — all as reported on that day.
+
+**Numbering 1–33:** every story has one serial number, in reading order — heroes 1–3, mid stories 4–15, also-on lines 16–33. The number appears three times, always in the story's continent colour: as a badge on the story's panel, as a numbered marker on the world map, and before the story's line in the also-on list. To find where a story happened, match its number on the map; to read what happened at a marker, match its number in the list or panels.
 
 **Heroes**
 1. **Ukraine hits Kerch Bridge again** — Ukrainian drones hit the bridge for a second day; a road section fell into the strait, cutting a key supply route to Crimea.
 2. **US strikes Iran after drone attacks** — US jets hit a missile site on Qeshm Island after Iran fired drones at a US radar in Bahrain — its third attack there in five days.
 3. **Trump heads to Asia for APEC talks** — Trump starts in Manila for the ASEAN–US summit, then heads to Shenzhen for APEC talks with China's Xi and Russia's Putin.
 
-**Mid stories**
+**Mid stories** (numbered 4–15, in reading order)
 - **Ebola in DR Congo** — Outbreak passes 11,000 cases and 5,400 deaths.
 - **Nvidia: $115 billion** — Record $115B sales, yet ousted CEO Jensen Huang will not return.
 - **Nepal first** — First UN loss-and-damage funds set aside after floods.
@@ -27,7 +29,7 @@ A newspaper front page (`entry.png`, 1024x1024 PNG) with **33 stories from Tuesd
 - **France strikes again** — Second nationwide strike over pay and conditions.
 - **Kyiv bridges hit** — Russian strikes hit two bridges, disrupting water and power.
 
-**Also on Tuesday 17 November** (18 one-liners in the image): Moldova, the West Bank, the UK, Iran, Gaza, Russia, France, Trump, Cuba, China–Canada, Thailand, Cyclone Alvan in India, Kenya, Pope Leo, Apple, Jensen Huang's Congress testimony, China, and oil prices.
+**Also on Tuesday 17 November** (numbered 16–33 in the image): 16 Moldova, 17 the West Bank, 18 the UK, 19 Iran, 20 Gaza, 21 Russia, 22 France, 23 Trump, 24 Cuba, 25 China–Canada, 26 Thailand, 27 Cyclone Alvan in India, 28 Kenya, 29 Pope Leo, 30 Apple, 31 Jensen Huang's Congress testimony, 32 China, and 33 oil prices.
 
 The image is drawn by `draw.py` (Python + PIL) from flat shapes and crisp text, so it stays legible at small sizes and contains no invented details. Contested claims are marked as claims in the image.
 

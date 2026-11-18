@@ -5,7 +5,9 @@ A newspaper front page summing up Tuesday 17 November 2026 in one image:
 serif masthead with the date and a true story count, three hero stories
 with map/flag illustrations, twelve mid stories with small illustrations
 and category tags, a world-map panel, an "also on Tuesday" list, and a
-sources footer. Flat shapes and crisp text only, so the image stays
+sources footer. Every story carries a serial number 1-33 — a badge on its
+panel, a number on its map marker, and a number before its also-on line —
+so the list and the map cross-reference each other. Flat shapes and crisp text only, so the image stays
 legible at small sizes and the PNG stays far under the 1 MiB limit.
 Deterministic: same input, same bytes. Every story happened or was first
 reported on Tuesday 17 November 2026; contested claims are marked as
@@ -81,6 +83,14 @@ def fit_font(draw, text, path, size, max_width):
             return fnt
         size -= 1
     return font(path, 10)
+
+
+def num_badge(draw, cx, cy, r, n, fill, size):
+    """Numbered circle badge: continent colour, bold white number, ring."""
+    draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=fill,
+                 outline=WHITE, width=2)
+    draw.text((cx, cy), str(n), font=font(BOLD, size), fill=WHITE,
+              anchor="mm")
 
 
 def virus(draw, cx, cy, r, spike, body, light):
@@ -386,22 +396,43 @@ CONTINENTS = [
     [(370, 154), (412, 148), (426, 164), (410, 182), (376, 178)],
 ]
 
-# Story locations on the map (x, y in the 446 x 220 box, continent colour).
-MAP_DOTS = [
-    (265, 54, C_EUROPE),    # Kerch Bridge
-    (292, 77, C_MIDEAST),   # Qeshm Island
-    (373, 92, C_ASIA),      # Manila
-    (72, 65, C_AMERICAS),   # Nvidia (California)
-    (252, 112, C_AFRICA),   # DR Congo
-    (327, 76, C_ASIA),      # Nepal
-    (265, 71, C_MIDEAST),   # Gaza
-    (354, 52, C_ASIA),      # Mongolia
-    (395, 66, C_ASIA),      # Japan
-    (119, 70, C_AMERICAS),  # US measles (Atlanta)
-    (353, 34, C_EUROPE),    # Siberia crash
-    (226, 50, C_EUROPE),    # Paris
-    (279, 92, C_MIDEAST),   # Yemen
-    (258, 46, C_EUROPE),    # Kyiv
+# Story locations on the map (x, y in the 446 x 220 box, continent colour,
+# story number 1-33). Positions are approximate for the stylised map and
+# spread just enough to keep the numbered circles from touching.
+MAP_MARKERS = [
+    (272, 50, C_EUROPE, 1),    # Kerch Bridge
+    (292, 77, C_MIDEAST, 2),   # Qeshm Island
+    (373, 92, C_ASIA, 3),      # Manila
+    (246, 110, C_AFRICA, 4),   # DR Congo
+    (78, 72, C_AMERICAS, 5),   # Nvidia, California
+    (327, 76, C_ASIA, 6),      # Nepal
+    (260, 66, C_MIDEAST, 7),   # Gaza
+    (354, 52, C_ASIA, 8),      # Mongolia
+    (395, 66, C_ASIA, 9),      # Japan
+    (114, 78, C_AMERICAS, 10), # US measles
+    (353, 34, C_EUROPE, 11),   # Siberia crash
+    (222, 42, C_EUROPE, 12),   # Paris
+    (282, 96, C_MIDEAST, 13),  # Yemen
+    (200, 44, C_EUROPE, 14),   # France strikes
+    (258, 38, C_EUROPE, 15),   # Kyiv
+    (244, 58, C_EUROPE, 16),   # Moldova
+    (252, 82, C_MIDEAST, 17),  # West Bank
+    (190, 26, C_EUROPE, 18),   # UK
+    (302, 58, C_MIDEAST, 19),  # Iran
+    (272, 80, C_MIDEAST, 20),  # Gaza airstrikes
+    (300, 22, C_EUROPE, 21),   # Russia
+    (212, 62, C_EUROPE, 22),   # France covert op
+    (104, 58, C_AMERICAS, 23), # Trump, US
+    (100, 90, C_AMERICAS, 24), # Cuba
+    (336, 44, C_ASIA, 25),     # China–Canada
+    (352, 96, C_ASIA, 26),     # Thailand
+    (312, 90, C_ASIA, 27),     # India
+    (264, 122, C_AFRICA, 28),  # Kenya
+    (112, 140, C_AMERICAS, 29),  # Peru
+    (58, 58, C_AMERICAS, 30),  # Apple, California
+    (132, 54, C_AMERICAS, 31), # US Congress
+    (372, 62, C_ASIA, 32),     # China electric plane
+    (304, 94, C_MIDEAST, 33),  # Oil, Gulf
 ]
 
 LEGEND = [
@@ -487,6 +518,15 @@ ALSO_ON = [
 
 STORY_COUNT = len(HEROES) + len(MIDS) + len(ALSO_ON)  # 33
 
+# Number colours: the badge/marker/list number of each story takes its
+# continent colour, so the number cross-references the map legend.
+HERO_COLORS = [C_EUROPE, C_MIDEAST, C_ASIA]
+MID_COLORS = [C_AFRICA, C_AMERICAS, C_ASIA, C_MIDEAST, C_ASIA, C_ASIA,
+              C_AMERICAS, C_EUROPE, C_EUROPE, C_MIDEAST, C_EUROPE, C_EUROPE]
+ALSO_COLORS = [C_EUROPE, C_MIDEAST, C_EUROPE, C_MIDEAST, C_MIDEAST, C_EUROPE,
+               C_EUROPE, C_AMERICAS, C_AMERICAS, C_ASIA, C_ASIA, C_ASIA,
+               C_AFRICA, C_AMERICAS, C_AMERICAS, C_AMERICAS, C_ASIA, C_MIDEAST]
+
 
 def main():
     img = Image.new("RGB", (W, H), PAPER)
@@ -509,6 +549,7 @@ def main():
         d.rectangle([px, hy, px + hw, hy + hh], fill=WHITE,
                     outline=INK, width=2)
         scene(d, px + 2, hy + 2, hw - 4, 92)
+        num_badge(d, px + 20, hy + 20, 17, i + 1, HERO_COLORS[i], 17)
         d.text((px + 10, hy + 98), tag, font=font(BOLD, 11), fill=RED)
         lines = wrap(d, title, font(BOLD, 18), hw - 20)
         ly = hy + 114
@@ -532,6 +573,7 @@ def main():
         d.rectangle([px, py, px + mw, py + mh], fill=WHITE,
                     outline=INK, width=2)
         scene(d, px + 2, py + 2, mw - 4, 40)
+        num_badge(d, px + 16, py + 16, 13, i + 4, MID_COLORS[i], 13)
         d.text((px + 10, py + 46), tag, font=font(BOLD, 10), fill=RED)
         tfont = fit_font(d, title, BOLD, 15, mw - 20)
         lines = wrap(d, title, tfont, mw - 20)
@@ -562,10 +604,9 @@ def main():
         d.polygon([(map_x + ox + px * ms, map_y + py * ms)
                    for px, py in poly],
                   fill=(170, 196, 168), outline=(120, 150, 125))
-    for dx, dy, col in MAP_DOTS:
+    for dx, dy, col, n in MAP_MARKERS:
         cx, cy = map_x + ox + dx * ms, map_y + dy * ms
-        d.ellipse([cx - 4, cy - 4, cx + 4, cy + 4], fill=col,
-                  outline=WHITE, width=1)
+        num_badge(d, cx, cy, 7, n, col, 11 if n < 10 else 9)
     # legend: 2 rows x 3 columns
     ly = by + 210
     for i, (name, col) in enumerate(LEGEND):
@@ -585,8 +626,14 @@ def main():
     for ci in range(2):
         cx = ax + ci * (col_w + gap)
         for j, line in enumerate(ALSO_ON[ci * half:(ci + 1) * half]):
-            fnt = fit_font(d, line, REG, 12, col_w)
-            d.text((cx, by + 36 + j * 23), line, font=fnt, fill=INK)
+            n = 16 + ci * half + j
+            num = "%d." % n
+            nfnt = font(BOLD, 12)
+            nw = d.textlength(num, font=nfnt)
+            fnt = fit_font(d, line, REG, 12, col_w - nw - 6)
+            d.text((cx, by + 36 + j * 23), num, font=nfnt,
+                   fill=ALSO_COLORS[n - 16])
+            d.text((cx + nw + 6, by + 36 + j * 23), line, font=fnt, fill=INK)
 
     # ---- Footer ----
     d.rectangle([0, 976, W, H], fill=NAVY)
